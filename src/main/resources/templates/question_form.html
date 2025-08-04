@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>질문등록</title>
+</head>
+<body>
+  <form th:action="@{/question/create}" method="post">
+    <div>제목</div>
+    <input type="text" name="subject" id="subject">
+
+    <div>내용</div>
+    <textarea name="content" id="content" rows="10"></textarea>
+    <input type="submit" value="저장하기" >
+  </form>
+</body>
+</html>
