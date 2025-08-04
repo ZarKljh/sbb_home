@@ -1,9 +1,12 @@
 package com.sbb.sbb.Question;
 
+import com.sbb.sbb.Answer.AnswerForm;
+import jakarta.validation.Valid;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,23 +27,25 @@ public class QuestionController {
     }
 
     @GetMapping(value ="/detail/{id}")
-    public String getQuestion(Model model, @PathVariable("id") Integer id){
+    public String getQuestion(Model model, @PathVariable("id") Integer id, AnswerForm answerForm){
         Question question = this.questionService.getQuestion(id);
         model.addAttribute("question", question);
         return "question_detail";
     }
 
     @GetMapping("/create")
-    public String createQuestion(){
+    public String createQuestion(QuestionForm questionForm){
         return "question_form";
     }
 
     @PostMapping("/create")
     public String createQuestion(
-            @RequestParam(value="subject")String subject,
-            @RequestParam(value="content")String content
+            @Valid QuestionForm questionForm, BindingResult bindingResult
             ){
-        this.questionService.create(subject, content);
+        if (bindingResult.hasErrors()) {
+            return "question_form";
+        }
+        this.questionService.create(questionForm.getSubject(), questionForm.getContent());
         return "redirect:/question/list";
     }
 
